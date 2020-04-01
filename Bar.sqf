@@ -92,10 +92,7 @@ AZM_3DPBar = {
 		_newpos = [_posx - ((0.3 * safezoneW)/_divisore),_posy];
 
 		// check if is visible and if there is nothing between player and progress bar pos
-		if (
-			!lineIntersects [eyePos player, _position, player] &&
-			(!(_newpos select 0 > 25 || _newpos select 0 < -25) && !(_newpos select 1 > 15 || _newpos select 1 < -15))
-		) then {
+		if (!(_newpos select 0 > 25 || _newpos select 0 < -25) && !(_newpos select 1 > 15 || _newpos select 1 < -15)) then {
 			// update position of hte bar
 			{_x ctrlSetPosition _newpos;} count _controls;
 		} else {
