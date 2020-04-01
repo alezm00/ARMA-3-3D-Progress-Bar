@@ -27,7 +27,7 @@ AZM_3DPBar = {
 	_background ctrlSetBackgroundColor [0,0,0,0.3];
 
 
-	private _progressBar = findDisplay 46 ctrlCreate ["Progressbarra", -1];
+	private _progressBar = findDisplay 46 ctrlCreate ["RscProgress", -1];
 	_progressBar ctrlSetPosition [0,-10,0.3 * safezoneW,0.03 * safezoneH];
 	_progressBar progressSetPosition 0;
 	_progressBar ctrlSetTextColor _color;
