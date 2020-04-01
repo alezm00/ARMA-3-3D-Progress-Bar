@@ -1,3 +1,32 @@
+/* 
+Function: AZM_3DPBar
+Author: 
+	Alezm
+Description:
+    3D progress bar for arma 3
+Parameters:
+    _position		- ATL Position or object (this is static can't attach to a moving object) <ARRAY or OBJECT>
+    _counter  		- Time for the progress bar to complete <NUMBER>
+    _text  			- Text displayed in the bat (Accept structured text) <STRING>
+    _condition  	- Execute every frame. If reports false, close the progress bar <CODE>
+    _onSuccess  	- Script to execute if the progress bar completed (optional, default: {}) <CODE>
+    _onFailure  	- Script to execute if the progress bar was aborted prematurely (optional, default: {}) <CODE>
+	_arguments		- Arguments passed to the scripts (optional, default: []) <ANY>
+    _color 			- Progress bar color (optional, default: Profile color) <ARRAY>
+Arguments:
+    _this:
+        #0 - same as _arguments <ANY>
+        #1 - _passedTime <NUMBER>
+        #2 - _endTime <NUMBER>
+        #3 - _isOutOfArea <BOOLEAN>
+Returns:
+    Nothing
+Examples:
+    https://github.com/alezm00/ARMA-3-3D-Progress-Bar#example
+*/
+
+
+
 AZM_3DPBar = {
 	if (!hasInterface) exitWith {};
 	params [
@@ -8,7 +37,7 @@ AZM_3DPBar = {
 		["_onSuccess",{},[{true}]],
 		["_onFailure",{},[{true}]],
 		["_arguments", []],
-		["_color","",["",[]]]
+		["_color","",[[],""]]
 	];
 
 	if (_position isEqualType objNull) then {
