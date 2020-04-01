@@ -22,7 +22,6 @@ AZM_3DPBar = {
 	if (isLocalized _text) then {
 		_text = localize _text;
 	};
-	private _backgroud_color = [0.18,0.216,0.251,1];
 	private _background = findDisplay 46 ctrlCreate ["RscText", -1];
 	_background ctrlSetPosition [-10,0,0.3 * safezoneW,0.03 * safezoneH];
 	_background ctrlSetBackgroundColor [0,0,0,0.3];
@@ -47,7 +46,6 @@ AZM_3DPBar = {
 	} count _array;
 
 
-
 	_count = missionNamespace getVariable ["AZM_3DPBar_progressbar_counter",0];
 	missionNamespace setVariable ["AZM_3DPBar_progressbar_counter",(_count + 1)];
 	[format["AZM_3DPBar_event_%1",_count + 1], "onEachFrame", {
@@ -63,13 +61,14 @@ AZM_3DPBar = {
 
 		// if condition is false then delete the bar and the event and call _onFailure
 		if (!_conditionCheck) exitWith {
-			[format["AZM_3DPBar_event_%1",_count],"onEachFrame"] call BIS_fnc_removeStackedEventHandler;
+			
 			{
 				_x ctrlSetFade 1;
 				_x ctrlCommit 0.5;
 				ctrlDelete _x;			
 			} count _controls;
 			[_arguments, _passedTime, _endTime] call _onFailure;
+			[format["AZM_3DPBar_event_%1",(_count + 1)],"onEachFrame"] call BIS_fnc_removeStackedEventHandler;
 		};
 		private _progress = linearConversion[ _startTime, _endTime, time, 0, 1 ];
 		_progressBar progressSetPosition _progress;
@@ -114,7 +113,6 @@ AZM_3DPBar = {
 		//execute only on finish
 		if (_progress >= 1) then {
 			//remove event
-			[format["AZM_3DPBar_event_%1",_count],"onEachFrame"] call BIS_fnc_removeStackedEventHandler;
 			//hide and delete bar
 			{
 				_x ctrlSetFade 1;
@@ -123,6 +121,7 @@ AZM_3DPBar = {
 			} count _controls;
 			//call _onSuccess code passing parameters
 			[_arguments, _passedTime, _endTime] call _onSuccess;
+			[format["AZM_3DPBar_event_%1",(_count + 1)],"onEachFrame"] call BIS_fnc_removeStackedEventHandler;
 		};
 
 	}, [ time, time + _counter,_text,_position,_array,_count,[_condition,_onSuccess,_onFailure,_arguments]] ] call BIS_fnc_addStackedEventHandler;
