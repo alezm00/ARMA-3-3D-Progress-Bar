@@ -1,5 +1,6 @@
 # ARMA-3-3D-Progress-Bar
 3D progress bar for arma 3
+![](https://i.imgur.com/tr860g8.gif)
 
 ## Docs
 
@@ -16,9 +17,9 @@
 
 ## Condition, onSuccess  and onFail 
 In these 3 parameters you have access to:
-`_arguments` parameter
- `_passedTime` (time passed from start)
- `_endTime` (the time when the bar will complete)
+- `_arguments` parameter
+-  `_passedTime` (time passed from start)
+-  `_endTime` (the time when the bar will complete)
 
 ## Example
 Base example:
