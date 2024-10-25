@@ -1,6 +1,6 @@
-/* 
+/*
 Function: AZM_3DPBar
-Author: 
+Author:
 	Alezm
 Description:
     3D progress bar for arma 3
@@ -39,9 +39,9 @@ AZM_3DPBar = {
 		["_arguments", []],
 		["_color","",[[],""]]
 	];
-
+    _posisOBJ = false;
 	if (_position isEqualType objNull) then {
-		_position = getPosATL _position;
+        _posisOBJ = true;
 	};
 	if (_color isEqualType []) then {
 		_color = _color;
@@ -78,7 +78,7 @@ AZM_3DPBar = {
 	_count = missionNamespace getVariable ["AZM_3DPBar_progressbar_counter",0];
 	missionNamespace setVariable ["AZM_3DPBar_progressbar_counter",(_count + 1)];
 	[format["AZM_3DPBar_event_%1",_count + 1], "onEachFrame", {
-		params[ "_startTime", "_endTime","_text","_position","_controls","_count","_code"];
+		params[ "_startTime", "_endTime","_text","_position","_posisOBJ","_controls","_count","_code"];
 		_controls params ["_background","_progressBar","_textBar"];
 		_code params ["_condition","_onSuccess","_onFailure","_arguments"];
 
@@ -90,11 +90,11 @@ AZM_3DPBar = {
 
 		// if condition is false then delete the bar and the event and call _onFailure
 		if (!_conditionCheck) exitWith {
-			
+
 			{
 				_x ctrlSetFade 1;
 				_x ctrlCommit 0.5;
-				ctrlDelete _x;			
+				ctrlDelete _x;
 			} count _controls;
 			[_arguments, _passedTime, _endTime] call _onFailure;
 			[format["AZM_3DPBar_event_%1",(_count + 1)],"onEachFrame"] call BIS_fnc_removeStackedEventHandler;
@@ -112,11 +112,17 @@ AZM_3DPBar = {
 		//gen variables
 		_hide = false;
 		//positions
-		_pos = (worldToScreen _position);
-		_pos params ["_posx","_posy"];		
+        _positionCoords = [];
+        if (_posisOBJ) then {
+            _positionCoords = getPosATL _position;
+        } else {
+            _positionCoords = _position
+        };
+		_pos = (worldToScreen _positionCoords);
+		_pos params ["_posx","_posy"];
 
-		//calculate scall and x translation to center		
-		private _scale = linearConversion [0,15,(player distance _position),1,0.75];
+		//calculate scall and x translation to center
+		private _scale = linearConversion [0,15,(player distance _positionCoords),1,0.75];
 		_divisore = linearConversion [1,0.75,_scale,2,2.50];
 		_newpos = [_posx - ((0.3 * safezoneW)/_divisore),_posy];
 
@@ -125,7 +131,7 @@ AZM_3DPBar = {
 			// update position of hte bar
 			{_x ctrlSetPosition _newpos;} count _controls;
 		} else {
-			_hide = true;			
+			_hide = true;
 		};
 		{
 			_x ctrlSetScale _scale;
@@ -134,7 +140,7 @@ AZM_3DPBar = {
 			if (_scale < 0.8 || _hide) then {
 				_x ctrlSetFade 1;
 			};
-			_x ctrlCommit 0;				
+			_x ctrlCommit 0;
 		} count _controls;
 		//execute only on finish
 		if (_progress >= 1) then {
@@ -143,13 +149,13 @@ AZM_3DPBar = {
 			{
 				_x ctrlSetFade 1;
 				_x ctrlCommit 0.5;
-				ctrlDelete _x;			
+				ctrlDelete _x;
 			} count _controls;
 			//call _onSuccess code passing parameters
 			[_arguments, _passedTime, _endTime] call _onSuccess;
 			[format["AZM_3DPBar_event_%1",(_count + 1)],"onEachFrame"] call BIS_fnc_removeStackedEventHandler;
 		};
 
-	}, [ time, time + _counter,_text,_position,_array,_count,[_condition,_onSuccess,_onFailure,_arguments]] ] call BIS_fnc_addStackedEventHandler;
+	}, [ time, time + _counter,_text,_position,_posisOBJ,_array,_count,[_condition,_onSuccess,_onFailure,_arguments]] ] call BIS_fnc_addStackedEventHandler;
 	missionNamespace setVariable ["AZM_3DPBar_controls",_array];
 };
