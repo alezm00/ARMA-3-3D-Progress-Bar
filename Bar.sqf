@@ -28,7 +28,7 @@ Examples:
 
 
 AZM_3DPBar = {
-	if (!hasInterface) exitWith {};
+	// if (!hasInterface) exitWith {};
 	params [
 		["_position",getPosATL player,[[],objNull]],
 		["_counter",15,[0]],
@@ -114,7 +114,7 @@ AZM_3DPBar = {
 		//positions
         _positionCoords = [];
         if (_posisOBJ) then {
-            _positionCoords = getPosATL _position;
+            _positionCoords = _position modelToWorldVisual [0,0,0];
         } else {
             _positionCoords = _position
         };
